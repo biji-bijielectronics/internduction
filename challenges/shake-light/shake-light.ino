@@ -9,13 +9,17 @@ const int zPin = A2;
 int prevxValue = 0;
 int prevyValue = 0;
 int prevzValue = 0;
+
 int diffy = 0;
 int diffz =0;
+
+int brightness = 0;
+int fadeAmount = 5;
 
 void setup() {
   // put your setup code here, to run once:
 Serial.begin(9600);
-pinMode (13, OUTPUT);
+pinMode (9, OUTPUT);
 }
 
 void loop() {
@@ -35,11 +39,24 @@ if (diffz <0){
 }
 
 if (diffy >= 10 || diffz>=10) {
+  while (brightness <= 255) {  
+   analogWrite(9, brightness);
+   brightness = brightness + fadeAmount;
+   delay(30);
+  }
+  delay(3000);
+  
   Serial.println("SHAKE");
-  digitalWrite(13, HIGH);  
+  
 }
-else {Serial.println("Calm");
-digitalWrite(13, LOW);
+else {
+  
+  while (brightness >= 0) {  
+   analogWrite(9, brightness);
+   brightness = brightness - fadeAmount;
+   delay(30);
+  }
+  Serial.println("Calm");
 }
 delay(500);
 prevyValue = yValue;
